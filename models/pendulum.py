@@ -2,7 +2,7 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
-# args = mass, gravitational acc., length of pendulum, 
+# args = mass, gravitational acc., length of pendulum, drag coeff.
 def pendulum(state, t, m, g, l, b):
     theta, omega = state
     state_deriv = [omega, -((b/m) * omega) - ((g/l) * np.sin(theta))]
