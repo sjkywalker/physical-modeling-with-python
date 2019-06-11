@@ -15,13 +15,15 @@ def model(y, t):
 y0 = 1
 
 # time points
-t = np.linspace(0, 20)
+t = np.linspace(0, 40, 1000)
 
 # solve ODE
 y = odeint(model, y0, t)
 
 # plot results
-plt.plot(t, y)
+plt.plot(t, y, 'r-', label='Output (y(t))')
+plt.plot([0, 10, 10, 40], [0, 0, 2, 2], 'b-', label='Input (u(t))')
 plt.xlabel('time')
-plt.ylabel('y(t)')
+plt.ylabel('values')
+plt.legend(loc='best')
 plt.show()
