@@ -2,7 +2,7 @@ import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
-# args = mass, drag coeff., undamped ang. freq., ext. sin force amp., exponential const.
+# args = mass, drag coeff., undamped ang. freq., ext. initial force, exponential const.
 def spring(state, t, m, r, w0, F0, c):
     disp, vel = state
     state_deriv = [vel, -np.square(w0) * disp - r * vel + (F0/m) * np.exp(-c * t)]
