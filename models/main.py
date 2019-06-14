@@ -8,15 +8,28 @@ def spring(state, t, m, r, w0, F0, w):
     state_deriv = [vel, -np.square(w0) * disp - r * vel + (F0/m) * np.sin(w*t)]
     return state_deriv
 
+"""
 # coefficients
 m = 2.0
 r = 1.0 #2 * np.pi * 2.0 #1.0
 w0 = 2 * np.pi * 1.0
 F0 = 10.0 #10.0
 w = 2 * np.pi * 0.5
+# zeta = r/(2*w0): damping ratio
+"""
+
+# coefficients
+#[m,    r,                  w0,                 F0,     w              ]
+datasets = [\
+[2.0,   1.0,                2 * np.pi * 0.5,    10.0,   2 * np.pi * 0.5], \
+[2.0,   2 * np.pi * 1.0,    2 * np.pi * 1.0,    10.0,   2 * np.pi * 0.5], \
+[2.0,   2.0,                2 * np.pi * 0.5,    10.0,   2 * np.pi * 0.5]\
+]
+
+DNUM = len(datasets)
 
 # initial condition
-disp0 = 0.5
+disp0 = 2.0
 vel0 = 0.0
 state0 = [disp0, vel0]
 
@@ -24,12 +37,22 @@ state0 = [disp0, vel0]
 t = np.linspace(0, 5, 500)
 
 # solve ODE
-soln = odeint(spring, state0, t, args=(m, r, w0, F0, w))
+soln = []
+for i in range(0, DNUM):
+    soln.append(odeint(spring, state0, t, args=tuple(datasets[i])))
 
 # plot results
-plt.plot(t, soln[:, 0], 'r:', label='x(t)')
-plt.plot(t, soln[:, 1], 'g-', label='v(t)')
-plt.xlabel('time')
-plt.ylabel('values')
-plt.grid()
+fig, axs = plt.subplots(DNUM, sharex=True, sharey=True)
+fig.suptitle("Plots")
+
+for i in range(0, DNUM):
+    axs[i].plot(t, soln[i][:, 0], 'b-', label='x(t)')
+    axs[i].plot(t, soln[i][:, 1], 'r:', label='v(t)')
+    if i is 0:
+        axs[i].legend(loc='best')    
+    axs[i].grid()
+
+fig.text(0.5, 0.04, 'time', ha='center')
+fig.text(0.04, 0.5, 'values', va='center', rotation='vertical')
+
 plt.show()
